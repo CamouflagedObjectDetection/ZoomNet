@@ -65,6 +65,7 @@ class MSICOD_TrainDataset(_BaseSODDataset):
         self.joint_trans = A.Compose(
             [
                 A.HorizontalFlip(p=0.5),
+                UniRotate(limit=10, interpolation=cv2.INTER_LINEAR, p=0.5),
                 A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             ],
         )
