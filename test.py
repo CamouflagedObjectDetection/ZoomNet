@@ -4,6 +4,9 @@ import argparse
 import json
 import os
 import os.path
+import random
+from PIL import Image
+import matplotlib.pyplot as plt
 
 import numpy as np
 import torch
@@ -65,7 +68,7 @@ def test_once(
     save_path,
     tta_setting,
     clip_range=None,
-    show_bar=False,
+    show_bar=True,
     desc="[TE]",
     to_minmax=False,
 ):
@@ -121,7 +124,7 @@ def testing(model, cfg):
             data_loader=loader,
             tta_setting=cfg.test.tta,
             clip_range=cfg.test.clip_range,
-            show_bar=cfg.test.get("show_bar", False),
+            show_bar=cfg.test.get("show_bar", True),
             to_minmax=cfg.test.get("to_minmax", False),
         )
         print(f"Results on the testset({data_name}): {misc.mapping_to_str(data_path)}\n{seg_results}")
@@ -140,6 +143,62 @@ def main():
     model.eval()
 
     testing(model=model, cfg=cfg)
+
+    # Directory paths
+    test_images_dir = '/home/extracted_dataset/COD10K-v3/Test/Image'
+    gt_objects_dir = '/home/extracted_dataset/COD10K-v3/Test/GT_Object'
+    test_results_dir = './Test_Results/COD_Results1/COD10K-v3-test'
+
+    # List files
+    test_images_files = os.listdir(test_images_dir)
+
+    # Randomly select 15 images
+    selected_images = random.sample(test_images_files, 15)
+
+    for i, img_file in enumerate(selected_images):
+        # Path to test image
+        img_path = os.path.join(test_images_dir, img_file)
+        # Base name of the image without extension
+        base_name = os.path.splitext(img_file)[0]
+
+        # Paths to GT and test result images
+        gt_path = os.path.join(gt_objects_dir, base_name + '.png')
+        result_path = os.path.join(test_results_dir, base_name + '.png')
+
+        # Create a figure with 1 row and 3 columns
+        fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+        # Load and display test image
+        img = Image.open(img_path).convert('RGB')
+        axs[0].imshow(img)
+        axs[0].set_title(f'Image: {base_name}')
+        axs[0].axis('off')
+
+        # Load and display GT image
+        if os.path.exists(gt_path):
+            gt_img = Image.open(gt_path).convert('RGB')  # Ensure color image
+            axs[1].imshow(gt_img, cmap='gray')  # Use cmap='gray' for grayscale images
+
+        axs[1].set_title('GT')
+        axs[1].axis('off')
+
+        # Load and display result image
+        if os.path.exists(result_path):
+            result_img = Image.open(result_path).convert('RGB')
+            axs[2].imshow(result_img)
+
+        axs[2].set_title('Result')
+        axs[2].axis('off')
+
+        plt.tight_layout()
+
+        # Save the figure
+        output_path = os.path.join("./Test_Results/COD_Results1", f'combined_{base_name}.png')
+        plt.savefig(output_path, bbox_inches='tight')
+        plt.close(fig)  # Close the figure to free memory
+
+        print(f'Saved: {output_path}')
+
 
 
 if __name__ == "__main__":

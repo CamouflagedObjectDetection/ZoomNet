@@ -129,6 +129,10 @@ def testing(model, cfg):
         cfg.te_logger.record(f"Results on the testset({data_name}): {misc.mapping_to_str(data_path)}\n{seg_results}")
         cfg.excel_logger(row_data=seg_results, dataset_name=data_name, method_name=cfg.exp_name)
 
+def ensure_directory_exists(filepath):
+    directory = os.path.dirname(filepath)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def training(model, cfg) -> pipeline.ModelEma:
     tr_loader = pipeline.get_tr_loader(cfg)
@@ -187,6 +191,8 @@ def training(model, cfg) -> pipeline.ModelEma:
     loss_recorder = recorder.AvgMeter()
 
     curr_iter = 0
+    best_loss = float('inf')
+
     for curr_epoch in range(start_epoch, cfg.train.num_epochs):
         cfg.tr_logger.record(f"Exp_Name: {cfg.exp_name}")
         time_logger.start(msg="An Epoch Start...")
@@ -273,6 +279,23 @@ def training(model, cfg) -> pipeline.ModelEma:
         if curr_epoch == 0 and model_ema is not None:
             model_ema.set(model=model)  # using a better initial model state
 
+        # Ensure directories exist before saving models
+        checkpoint_final_path = f"./output/epoch_{curr_epoch}/pth/checkpoint_final.pth"
+        state_final_path =f"./output/epoch_{curr_epoch}/pth/state_final.pth"
+        weight_path = f"./output/epoch_{curr_epoch}/pth/weight.pth"
+        best_weight_path = f"./output/best_weight.pth"
+        best_checkpoint_path = f"./output/best_checkpoint.pth"
+        best_state_final_path = f"./output/best_state_final.pth"
+
+
+        ensure_directory_exists(checkpoint_final_path)
+        ensure_directory_exists(state_final_path)
+        ensure_directory_exists(weight_path)
+        ensure_directory_exists(best_weight_path)
+        ensure_directory_exists(best_checkpoint_path)
+        ensure_directory_exists(best_state_final_path)
+
+
         # save all params for (curr_epoch+1)th epoch
         io.save_params(
             exp_name=cfg.exp_name,
@@ -283,16 +306,59 @@ def training(model, cfg) -> pipeline.ModelEma:
             next_epoch=curr_epoch + 1,
             total_epoch=cfg.train.num_epochs,
             save_num_models=cfg.train.save_num_models,
-            full_net_path=cfg.path.final_full_net,
-            state_net_path=cfg.path.final_state_net,
+            full_net_path= checkpoint_final_path,
+            state_net_path= state_final_path,
         )
+
+        # Save weight for each epoch
+        io.save_weight(model=model, save_path=weight_path)
+
+        # Save the best model
+        if loss_recorder.avg < best_loss:
+            best_loss = loss_recorder.avg
+            io.save_weight(model=model, save_path=best_weight_path)
+            io.save_params(
+            exp_name=cfg.exp_name,
+            model=model,
+            model_ema=model_ema,
+            optimizer=optimizer,
+            scaler=scaler,
+            next_epoch=curr_epoch + 1,
+            total_epoch=cfg.train.num_epochs,
+            save_num_models=cfg.train.save_num_models,
+            full_net_path= best_checkpoint_path,
+            state_net_path= best_state_final_path,
+        )
+
         time_logger.now(pre_msg="An Epoch End...")
 
         if curr_iter >= cfg.train.num_iters:
             break
 
-    # only save the last weight
-    io.save_weight(model=model, save_path=cfg.path.final_state_net)
+
+
+    # save the final weight and checkpoint
+    last_state_path = "./output/last_epoch/pth/state_final.pth"
+    last_checkpoint_path ="./output/last_epoch/pth/best_checkpoint.pth"
+    last_weight_path = "./output/last_epoch/pth/weight.pth"
+
+    ensure_directory_exists(last_state_path)
+    ensure_directory_exists(last_checkpoint_path)
+    ensure_directory_exists(last_weight_path)
+
+    io.save_params(
+        exp_name=cfg.exp_name,
+        model=model,
+        model_ema=model_ema,
+        optimizer=optimizer,
+        scaler=scaler,
+        next_epoch=curr_epoch + 1,
+        total_epoch=cfg.train.num_epochs,
+        save_num_models=cfg.train.save_num_models,
+        full_net_path= last_checkpoint_path,
+        state_net_path= last_state_path,
+        )
+    io.save_weight(model=model, save_path=last_weight_path)
     return model_ema
 
 
