@@ -1,6 +1,7 @@
 # (CVPR 2022) Zoom In and Out: A Mixed-scale Triplet Network for Camouflaged Object Detection
 
 
+
 [![license: mit](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![LAST COMMIT](https://img.shields.io/github/last-commit/lartpang/ZoomNet?style=flat-square)
 ![ISSUES](https://img.shields.io/github/issues/lartpang/ZoomNet?style=flat-square)
