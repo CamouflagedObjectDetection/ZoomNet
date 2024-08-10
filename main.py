@@ -368,10 +368,10 @@ def main():
 
     # Directory paths
     paths = {
-        "images": "/content/extracted_dataset/COD10K-v3/Train/Image",
-        "GT_Edge": "/content/extracted_dataset/COD10K-v3/Train/GT_Edge",
-        "GT_Instance": "/content/extracted_dataset/COD10K-v3/Train/GT_Instance",
-        "GT_Object": "/content/extracted_dataset/COD10K-v3/Train/GT_Object"
+        "images": "/root/cod/datasets/COD10K-v3/Train/Image",
+        "GT_Edge": "/root/cod/datasets/COD10K-v3/Train/GT_Edge",
+        "GT_Instance": "/root/cod/datasets/COD10K-v3/Train/GT_Instance",
+        "GT_Object": "/root/cod/datasets/COD10K-v3/Train/GT_Object"
     }
 
     # List of images 
@@ -418,7 +418,7 @@ def main():
     print(" there are ",len(os.listdir(paths["GT_Edge"])), "images in GT_Edge" )
     print(" there are ",len(os.listdir(paths["GT_Instance"])), "images in GT_Instance" )
     print(" there are ",len(os.listdir(paths["GT_Object"])), "images in GT_Object" )
-    
+
     cfg = parse_config()
 
     if not cfg.resume_from:
