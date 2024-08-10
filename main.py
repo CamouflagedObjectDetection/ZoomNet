@@ -363,6 +363,62 @@ def training(model, cfg) -> pipeline.ModelEma:
 
 
 def main():
+
+
+
+    # Directory paths
+    paths = {
+        "images": "/content/extracted_dataset/COD10K-v3/Train/Image",
+        "GT_Edge": "/content/extracted_dataset/COD10K-v3/Train/GT_Edge",
+        "GT_Instance": "/content/extracted_dataset/COD10K-v3/Train/GT_Instance",
+        "GT_Object": "/content/extracted_dataset/COD10K-v3/Train/GT_Object"
+    }
+
+    # List of images 
+    list_test_images = os.listdir(paths["images"])
+
+    # List of images to delete
+    images_to_remove = []
+
+    # Check the name of the images
+    for image in list_test_images:
+        images_split = image.split("-")
+        if len(images_split) > 1 and images_split[1] == "NonCAM":
+            images_to_remove.append(image.split(".")[0])
+    # Delete files from directories
+    for image in images_to_remove:
+        # Delete from the images directory
+        img = image +".jpg"
+        image_path = os.path.join(paths["images"], img)
+        if os.path.isfile(image_path):
+            os.remove(image_path)
+
+        # Delete from the GT_Object directory
+        gt_object_image = image + ".png"
+        gt_object_path = os.path.join(paths["GT_Object"], gt_object_image)
+        if os.path.isfile(gt_object_path):
+            os.remove(gt_object_path)
+
+        # Delete from the GT_Instance directory
+        gt_instance_path = os.path.join(paths["GT_Instance"], gt_object_image)
+        if os.path.isfile(gt_instance_path):
+            os.remove(gt_instance_path)
+
+        # Remove from the GT_Edge directory
+        gt_edge_path = os.path.join(paths["GT_Edge"], gt_object_image)
+        if os.path.isfile(gt_edge_path):
+            os.remove(gt_edge_path)
+
+
+    print(f"Removed NonCAM img from GT_Edge ")
+    print(f"Removed NonCAM img from GT_Instance ")
+    print(f"Removed NonCAM img from images ")
+    print(f"Removed NonCAM img from GT_Object ")
+    print(" there are ",len(os.listdir(paths["images"])), "images in image train" )
+    print(" there are ",len(os.listdir(paths["GT_Edge"])), "images in GT_Edge" )
+    print(" there are ",len(os.listdir(paths["GT_Instance"])), "images in GT_Instance" )
+    print(" there are ",len(os.listdir(paths["GT_Object"])), "images in GT_Object" )
+    
     cfg = parse_config()
 
     if not cfg.resume_from:
