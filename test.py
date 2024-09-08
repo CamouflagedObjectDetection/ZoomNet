@@ -145,9 +145,9 @@ def main():
     testing(model=model, cfg=cfg)
 
     # Directory paths
-    test_images_dir = '/root/cod/datasets/COD10K-v3/Test/Image'
-    gt_objects_dir = '/root/cod/datasets/COD10K-v3/Test/GT_Object'
-    test_results_dir = './Test_Results/COD_Results1/COD10K-v3-test'
+    test_images_dir = '/root/cod/datasets/MHCD_edition_v1/test/images'
+    gt_objects_dir = '/root/cod/datasets/MHCD_edition_v1/test/GT'
+    test_results_dir = './Test_Results/COD_Results1/MHCD_edition_v1'
 
     # List files
     test_images_files = os.listdir(test_images_dir)

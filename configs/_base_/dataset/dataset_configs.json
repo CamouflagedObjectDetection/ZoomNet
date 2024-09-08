@@ -1,40 +1,41 @@
 {
-  "COD10K-v3-train": {
-    "root": "/root/cod/datasets/COD10K-v3/Train",
+  "MHCD_edition_v1-train": {
+    "root": "/root/cod/datasets/MHCD_edition_v1/train",
     "image": {
-      "path": "Image",
+      "path": "images",
       "suffix": ".jpg"
     },
     "mask": {
-      "path": "GT_Object",
-      "suffix": ".png"
+      "path": "GT",
+      "suffix": ".jpg"
     },
     "instance": {
       "path": "GT_Instance",
-      "suffix": ".png"
+      "suffix": ".jpg"
     },
     "edge": {
       "path": "GT_Edge",
-      "suffix": ".png"
+      "suffix": ".jpg"
     }
   },
-  "COD10K-v3-test": {
-    "root": "/root/cod/datasets/COD10K-v3/Test",
+  "MHCD_edition_v1-test": {
+    "root": "/root/cod/datasets/MHCD_edition_v1/test",
     "image": {
-      "path": "Image",
+      "path": "images",
       "suffix": ".jpg"
     },
     "mask": {
-      "path": "GT_Object",
-      "suffix": ".png"
+      "path": "GT",
+      "suffix": ".jpg"
     },
     "instance": {
       "path": "GT_Instance",
-      "suffix": ".png"
+      "suffix": ".jpg"
     },
     "edge": {
       "path": "GT_Edge",
-      "suffix": ".png"
+      "suffix": ".jpg"
     }
   }
+
 }
