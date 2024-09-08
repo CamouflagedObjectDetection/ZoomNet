@@ -90,8 +90,7 @@ def get_datasets_info_with_keys(dataset_infos: list, extra_keys: list) -> dict:
 
 
         # Print list of images and their count
-        print(f"MHCD dataset: {len(image_names)} images")
-        print(f"COD10K dataset: {len(mask_names)} images")
+        print(f"{len(image_names)} : images")
 
 
         for i, name in enumerate(image_names):
