@@ -51,13 +51,13 @@ datasets = dict(
     train=dict(
         dataset_type="msi_cod_tr",
         shape=dict(h=384, w=384),
-        path=["MHCD_edition_v1-train"],  # Change according to my dataset
+        path=["MHCD_edition_v1_train","COD10K-v3-train"],  # Change according to my dataset
         interp_cfg=dict(),
     ),
     test=dict(
         dataset_type="msi_cod_te",
         shape=dict(h=384, w=384),
-        path=["MHCD_edition_v1-test"],  # Change according to my dataset
+        path=["MHCD_edition_v1_test","COD10K-v3-test"],  # Change according to my dataset
         interp_cfg=dict(),
     ),
 )
