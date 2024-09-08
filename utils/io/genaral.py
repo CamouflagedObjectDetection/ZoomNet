@@ -26,11 +26,19 @@ def get_data_from_txt(path: str) -> list:
             line = f.readline().strip()
     return lines
 
-
 def get_name_list_from_dir(path: str) -> list:
-    """直接从文件夹中读取所有文件不包含扩展名的名字"""
-    return [os.path.splitext(x)[0] for x in os.listdir(path)]
-
+    # بررسی اینکه آیا مسیر مربوط به MHCD است
+    if 'MHCD' in path:
+        # دریافت تمام فایل‌های .jpg در دیتاست MHCD
+        return [os.path.splitext(x)[0] for x in os.listdir(path)]
+    
+    # بررسی اینکه آیا مسیر مربوط به COD10K است
+    elif 'COD10K' in path:
+        # دریافت تصاویری که شامل "-CAM-" هستند از دیتاست COD10K
+        return [os.path.splitext(x)[0] for x in os.listdir(path) if '-CAM-' in x]
+    
+    else:
+        raise ValueError("Unrecognized dataset path.")
 
 def get_datasets_info_with_keys(dataset_infos: list, extra_keys: list) -> dict:
     """
@@ -79,6 +87,12 @@ def get_datasets_info_with_keys(dataset_infos: list, extra_keys: list) -> dict:
         if "mask" in total_keys:
             mask_names = get_name_list_from_dir(infos["mask"]["dir"])
             image_names = _get_intersection(image_names, mask_names)
+
+
+        # Print list of images and their count
+        print(f"MHCD dataset: {len(image_names)} images")
+        print(f"COD10K dataset: {len(mask_names)} images")
+
 
         for i, name in enumerate(image_names):
             for k in total_keys:
