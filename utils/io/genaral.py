@@ -29,7 +29,7 @@ def get_data_from_txt(path: str) -> list:
 
 def get_name_list_from_dir(path: str) -> list:
     """直接从文件夹中读取所有文件不包含扩展名的名字"""
-    return [os.path.splitext(x)[0] for x in os.listdir(path) if '-CAM-' in x]
+    return [os.path.splitext(x)[0] for x in os.listdir(path)]
 
 
 def get_datasets_info_with_keys(dataset_infos: list, extra_keys: list) -> dict:

@@ -1,40 +1,40 @@
 {
   "COD10K-v3-train": {
-    "root": "/root/cod/datasets/COD10K-v3/Train",
+    "root": "/home/amin_chini/cod/datasets/MHCD_COD10K_png/train",
     "image": {
-      "path": "Image",
-      "suffix": ".jpg"
+      "path": "images",
+      "suffix": ".png"
     },
     "mask": {
-      "path": "GT_Object",
+      "path": "GT",
       "suffix": ".png"
     },
     "instance": {
       "path": "GT_Instance",
-      "suffix": ".png"
+      "suffix": ".jpg"
     },
     "edge": {
       "path": "GT_Edge",
-      "suffix": ".png"
+      "suffix": ".jpg"
     }
   },
   "COD10K-v3-test": {
-    "root": "/root/cod/datasets/COD10K-v3/Test",
+    "root": "/home/amin_chini/cod/datasets/MHCD_COD10K_png/test",
     "image": {
-      "path": "Image",
-      "suffix": ".jpg"
+      "path": "images",
+      "suffix": ".png"
     },
     "mask": {
-      "path": "GT_Object",
+      "path": "GT",
       "suffix": ".png"
     },
     "instance": {
       "path": "GT_Instance",
-      "suffix": ".png"
+      "suffix": ".jpg"
     },
     "edge": {
       "path": "GT_Edge",
-      "suffix": ".png"
+      "suffix": ".jpg"
     }
   }
 }
